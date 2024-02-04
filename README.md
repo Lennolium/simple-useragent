@@ -212,9 +212,9 @@ improving documentation, or spreading awareness - your involvement strengthens t
 respectfully.
 
 - __Bug Report:__ If you are experiencing an issue while using the package, please [create an issue](https://github.com/Lennolium/simple-useragent/issues/new/choose).
-- __Feature Request:__ Make this project better by [submitting a feature request](https://github.com/Lennolium/simple-useragent/discussions/2).
+- __Feature Request:__ Make this project better by [submitting a feature request](https://github.com/Lennolium/simple-useragent/discussions/new?category=feature-requests).
 - __Documentation:__ Improve our documentation by [adding a wiki page](https://github.com/Lennolium/simple-useragent/wiki).
-- __Community Support:__ Help others on [GitHub Discussions](https://github.com/Lennolium/simple-useragent/discussions/new/choose).
+- __Community Support:__ Help others on [GitHub Discussions](https://github.com/Lennolium/simple-useragent/discussions).
 - __Security Report:__ Report critical security issues via our [template](https://github.com/Lennolium/simple-useragent/blob/main/.github/SECURITY.md).
 
 &nbsp;
