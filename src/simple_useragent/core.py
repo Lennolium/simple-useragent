@@ -639,8 +639,8 @@ class UserAgents:
                 for key in response.json():
                     if "error" in key:
                         LOGGER.warning(
-                                f"Rate limit reached for 'useragents.me' (15 "
-                                f"requests/h)."
+                                "Rate limit reached for 'useragents.me' "
+                                "(15 requests/h)."
                                 )
                         return None
 
@@ -808,14 +808,14 @@ class UserAgents:
 
         # 1.5. Forced use of local file cached user agents.
         if force_cached:
-            LOGGER.info(f"Forcing the use of local cached user agents ...")
+            LOGGER.info("Forcing the use of local cached user agents ...")
             self._user_agents_cached = self.__useragents_cached()
 
             if self._user_agents_cached:
                 return self._user_agents_cached
 
             # If no local cached user agents are available.
-            LOGGER.warning(f"Falling back to historic user agent."
+            LOGGER.warning("Falling back to historic user agent."
                            )
             return {"desktop": _FALLBACK_DESKTOP,
                     "mobile": _FALLBACK_MOBILE
@@ -831,8 +831,8 @@ class UserAgents:
 
         # 3. Call API to fetch user agents and save them to local cache.
         if force_cached is False:
-            LOGGER.info(f"Forcing the use of 'useragents.me' API instead "
-                        f"of local cached user agents first ..."
+            LOGGER.info("Forcing the use of 'useragents.me' API instead "
+                        "of local cached user agents first ..."
                         )
 
         self._user_agents_cached = self.__useragents_api()
