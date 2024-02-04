@@ -15,8 +15,8 @@
   <a href="https://github.com/Lennolium/simple-useragent/branches" > 
     <img src="https://img.shields.io/github/last-commit/Lennolium/simple-useragent?label=Last%20Updated&color=orange" alt="last updated" >
   <a></a>  
-   <a href="https://app.codacy.com/gh/Lennolium/swiftGuard/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade" > 
-    <img src="https://app.codacy.com/project/badge/Grade/7e4271efc8894c9fab80e2f27f896a87" alt="code quality" >
+   <a href="https://app.codacy.com/gh/Lennolium/simple-useragent/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade" > 
+    <img src="https://app.codacy.com/project/badge/Grade/747e8fea69394b10a1f4627babddcf4f" alt="code quality" >
     <a></a>
    <a href="https://github.com/Lennolium/simple-useragent/commits/main" > 
     <img src="https://img.shields.io/github/commit-activity/m/Lennolium/simple-useragent?label=Commit%20Activity" 
@@ -145,13 +145,13 @@ Fetching User Agents.
 
 You can also use the convenience functions to get user agents without initializing the class.
    ```python
-    get(num=2, force_cached=True, mobile=True)
+    sua.get(num=2, force_cached=True, mobile=True)
     # [UserAgent('Mozilla/5.0 (Android ...'), UserAgent('Mozilla/5.0 (iPhone; ...')]
     
-    get_list()  # Returns a list of 45 or 23 (desktop/mobile) user agents as strings.
+    sua.get_list()  # Returns a list of 45 or 23 (desktop/mobile) user agents as strings.
     # ['Mozilla/5.0 ...', 'Mozilla/5.0 (iPhone ...', 'Mozilla/5.0 (iPhone ...', ...]
     
-    get_dict()  # Returns a dictionary with all desktop and mobile user agents.
+    sua.get_dict()  # Returns a dictionary with all desktop and mobile user agents.
     # {'desktop': ['Mozilla/5.0 ...', ...] 'mobile': ['Mozilla/5.0 (iPhone ...', ...]}
    ```
 &nbsp;
@@ -159,7 +159,7 @@ You can also use the convenience functions to get user agents without initializi
 The instance offers attributes for the user agent properties.
    ```python
     # Parse a custom string directly to the UserAgent class and access its attributes.
-    obj = parse('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36')
+    obj = sua.parse('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36')
     obj.string  # 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit ...'
     obj.browser  # 'Chrome', 'Firefox', 'Safari', 'Edge', 'IE', 'Opera', 'Whale', 'QQ Browser', 'Samsung Browser', 'Other'
     obj.browser_version  # '110'

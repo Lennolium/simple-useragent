@@ -825,7 +825,7 @@ class TestUserAgents(unittest.TestCase):
         result_list2 = self.user_agents.get_list(num=2)
         result_list3 = self.user_agents.get_list()
         result_list4 = self.user_agents.get_list(num=20, mobile=False)
-        result_list4 = self.user_agents.get_list(num=10, mobile=True)
+        result_list5 = self.user_agents.get_list(num=10, mobile=True)
 
         result_dict = self.user_agents.get_dict()
 
@@ -856,6 +856,8 @@ class TestUserAgents(unittest.TestCase):
         self.assertIsInstance(result_list3, list)
         self.assertIsInstance(result_list3[0], str)
         self.assertGreaterEqual(len(result_list3), 10)
+        self.assertEqual(len(result_list4), 20)
+        self.assertEqual(len(result_list5), 10)
 
         # Dict (as get and get_list are getting the data from get_dict,
         # we do not test it as much).

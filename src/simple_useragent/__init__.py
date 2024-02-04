@@ -27,7 +27,7 @@ from simple_useragent.core import (UserAgents, UserAgent, get_dict, get_list,
 
 try:
     from importlib import metadata
-except (ImportError or ModuleNotFoundError):
+except (ImportError, ModuleNotFoundError):
     # Running on old Python -> use importlib-metadata package.
     import importlib_metadata as metadata
 
