@@ -50,9 +50,7 @@ Fetches real world, up-to-date user agents for use in web scraping to avoid bot 
 No more fake or outdated user agents, only user agents of real users.
 You can either get random or usage-weighted user agents. It caches
 the user agents locally to avoid unnecessary API calls, and refreshes them automatically every 24 hours
-from the public API of <a href="https://useragents.me/">useragents.me</a>.
-
-<br><br>
+from the public API of <a href="https://useragents.me/">useragents.me</a>. <br><br>
 
 [![Donate](https://img.shields.io/badge/Donate-Paypal-blue?style=flat-square&logo=paypal)](https://www.paypal.me/smogg)
 [![BuyMeACoffee](https://img.shields.io/badge/Buy%20me%20a-Coffee-f5d132?style=flat-square&logo=buymeacoffee)](https://buymeacoffee.com/lennolium)
@@ -83,11 +81,11 @@ from the public API of <a href="https://useragents.me/">useragents.me</a>.
 
 ## Features
 
-- __Up-to-date:__ No fake or outdated user agents, only real world data. Refreshed every 24 hours.
+- __Up-to-date:__ No fake or outdated user agents. `Only real world data`, refreshed every 24 hours.
 - __Wide Support:__ User Agents for Windows, macOS, Linux, Android and iOS devices: Google Chrome, Firefox, Safari, Edge, Opera, Whale and QQ browsers.
 - __Lightweight:__ Designed to consume minimal system resources and caches user agents locally.
 - __Simple:__ Easy to use and understand with a clean and simple API.
-- __Compatible:__ Supports Python 3.8 and above. Runs on Windows, macOS and Linux.
+- __Compatible:__ Supports `Python 3.8 and above`. Runs on Windows, macOS and Linux.
 - __Privacy:__ Protects the user by not collecting or sending any personal data.
 - __Open Source:__ Provides transparency and allows community contributions for continuous development.
 
@@ -127,22 +125,18 @@ Just import the package and use the convenience functions. For more advanced usa
 
 #### Advanced Usage
 
-Import the package.
+Import the package and initialize the UserAgents class to set custom settings (optional, see [Settings and Parameters](#settings-and-parameters) for details).
    ```python
-    from simple_useragent import UserAgents, get, get_list, get_dict, parse
-   ```
-&nbsp;
+    import simple_useragent as sua
 
-Initialize the class to set custom settings.
-   ```python
-    user_agents = UserAgents(max_retries=3, timeout=5, cache_duration=86400, cache_location='var/cache/simple-useragent')
+    simple_ua = sua.UserAgents(max_retries=3, timeout=5, cache_duration=86400, cache_location='var/cache/simple-useragent')
    ```
 &nbsp;
 
 Fetching User Agents.
    ```python
     # Fetch a specified number of random mobile user agent instances.
-    user_agents.get(num=2, shuffle=True, mobile=True)
+    simple_ua.get(num=2, shuffle=True, mobile=True)
     # [UserAgent('Mozilla/5.0 (iPhone ...'), UserAgent('Mozilla/5.0 (iPhone; ...')]
    ```  
 &nbsp;
@@ -151,8 +145,10 @@ You can also use the convenience functions to get user agents without initializi
    ```python
     get(num=2, force_cached=True, mobile=True)
     # [UserAgent('Mozilla/5.0 (Android ...'), UserAgent('Mozilla/5.0 (iPhone; ...')]
+    
     get_list()  # Returns a list of 45 or 23 (desktop/mobile) user agents as strings.
     # ['Mozilla/5.0 ...', 'Mozilla/5.0 (iPhone ...', 'Mozilla/5.0 (iPhone ...', ...]
+    
     get_dict()  # Returns a dictionary with all desktop and mobile user agents.
     # {'desktop': ['Mozilla/5.0 ...', ...] 'mobile': ['Mozilla/5.0 (iPhone ...', ...]}
     
@@ -160,8 +156,9 @@ You can also use the convenience functions to get user agents without initializi
    ```
 &nbsp;
 
-The instance offers attributes for the user agent properties. You can also parse a custom string directly to the UserAgent class.
+The instance offers attributes for the user agent properties.
    ```python
+    # Parse a custom string directly to the UserAgent class and access its attributes.
     obj = parse('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36')
     obj.string  # 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit ...'
     obj.browser  # 'Chrome', 'Firefox', 'Safari', 'Edge', 'IE', 'Opera', 'Whale', 'QQ Browser', 'Samsung Browser', 'Other'
@@ -179,7 +176,7 @@ The instance offers attributes for the user agent properties. You can also parse
 
 #### Settings and Parameters
 
-You can set custom settings when initializing the class.
+You can set custom preferences when initializing the class with `UserAgents(max_retries=3)`.
 
 - __max_retries:__ The maximum number of retries to reach the API, before falling back to local cache (default: _3_).
 - __timeout:__ The timeout in seconds for the API request (default: _5_).
@@ -188,7 +185,8 @@ You can set custom settings when initializing the class.
 
 &nbsp;
 
-Most functions can take the following parameters:
+The functions can take the following parameters:
+
 - __num:__ The number of user agents to fetch (default: _None_ = gets you all user agents available).
 - __mobile:__ Fetch mobile or desktop user agents (default: _False_ = desktop).
 - __shuffle:__ Whether to shuffle/randomize the order of user agents (default: _False_ = ordered by usage).
