@@ -76,7 +76,7 @@ body:
     id: os
     attributes:
       label: Operating System
-      description: "If applicable: Which operating system are you using? (e.g. Windows, macOS, Linux, Android, iOS, ...)"
+      description: Which operating system are you using? (e.g. Windows, macOS, Linux, Android, iOS, ...)"
       placeholder: Operating System name and version
 
   - type: markdown
