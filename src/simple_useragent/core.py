@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 
 """
-core.py: TODO: Headline...
+core.py: Responsible for the core functionality of the package.
 
-TODO: Description...
+This module contains the UserAgent and UserAgents classes, which are
+responsible for parsing and fetching user agents from the public
+'useragents.me' API and caching them locally. You can use the UserAgent
+class to parse a single, custom user agent string and gain access to its
+parsed attributes. 
 """
 
 # Header.
