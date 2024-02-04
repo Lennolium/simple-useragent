@@ -5,36 +5,36 @@ body:
     attributes:
       value: |
         <!--- Logo and Header -->
-        <div align="center">  
-        <picture>
-          <source media="(prefers-color-scheme: dark)" srcset="https://github.com/Lennolium/simple-useragent/raw/master/img/banner_dark.png" 
-        width="500vw">
-          <source media="(prefers-color-scheme: light)" 
-        srcset="https://github.com/Lennolium/simple-useragent/raw/master/img/banner_light.png" 
-        width="500vw">
-          <img alt="PrivacyShield Banner" src="https://github.com/Lennolium/simple-useragent/raw/master/img/banner_light.png" 
-        width="500vw">
-        </picture>
-        </div>
+         <div align="center">  
+         <picture>
+           <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/Lennolium/simple-useragent/main/img/banner_dark.png" 
+         width="500vw">
+           <source media="(prefers-color-scheme: light)" 
+         srcset="https://raw.githubusercontent.com/Lennolium/simple-useragent/main/img/banner_light.png" 
+         width="500vw">
+           <img alt="simple-useragent banner" src="https://raw.githubusercontent.com/Lennolium/simple-useragent/main/img/banner_light.png" 
+         width="500vw">
+         </picture>
+         </div>
         
-        <h2 align="center">Question Submit Form</h2>
-        <div align="center">
-          Provide the following information properly, which will help me to answer your question quickly. 
-          If you need further help with this form, please do not hesitate and contact me via <a href="mailto:simple-useragent@lennolium.dev">email</a>.
-          Also make sure to check the the discussion forum for similar questions before submitting this form to avoid duplicates.
-          For <b>issues regarding the package</b>, please open a new issue in the <a href="https://github.com/Lennolium/simple-useragent/issues/new/choose">Issues tab</a>. 
-          <br>
-          For all general questions, please use this form.
-          <br>
-          <br>
+         <h2 align="center">Question Submit Form</h2>
+         <div align="center">
+         Provide the following information properly, which will help me to answer your question quickly. 
+         If you need further help with this form, please do not hesitate and contact me via <a href="mailto:simple-useragent@lennolium.dev">email</a>.
+         Also make sure to check the the discussion forum for similar questions before submitting this form to avoid duplicates.
+         For <b>issues regarding the package</b>, please open a new issue in the <a href="https://github.com/Lennolium/simple-useragent/issues/new/choose">Issues tab</a>. 
+         <br>
+         For all general questions, please use this form.
+         <br>
+         <br>
         
-          <a href="https://github.com/Lennolium/simple-useragent/discussions" > 
-            <img src="https://img.shields.io/github/discussions/Lennolium/simple-useragent?style=flat-square&color=deepskyblue" alt="discussions" >
-          </a>
+         <a href="https://github.com/Lennolium/simple-useragent/discussions" > 
+         <img src="https://img.shields.io/github/discussions/Lennolium/simple-useragent?style=flat-square&color=deepskyblue" alt="discussions" >
+         </a>
         
-        </div>
-        <br>
-        <br>
+         </div>
+         <br>
+         <br>
 
 
   - type: dropdown
