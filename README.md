@@ -116,8 +116,10 @@ Just import the package and use the convenience functions. For more advanced usa
 
     sua.get(num=2, force_cached=True, mobile=True)
     # [UserAgent('Mozilla/5.0 (Android ...'), UserAgent('Mozilla/5.0 (iPhone; ...')]
+    
     sua.get_list()  # Returns a list of 45 or 23 (desktop/mobile) user agents as strings.
     # ['Mozilla/5.0 ...', 'Mozilla/5.0 (iPhone ...', 'Mozilla/5.0 (iPhone ...', ...]
+    
     sua.get_dict()  # Returns a dictionary with all desktop and mobile user agents.
     # {'desktop': ['Mozilla/5.0 ...', ...] 'mobile': ['Mozilla/5.0 (iPhone ...', ...]}
    ```
@@ -129,7 +131,7 @@ Import the package and initialize the UserAgents class to set custom settings (o
    ```python
     import simple_useragent as sua
 
-    simple_ua = sua.UserAgents(max_retries=3, timeout=5, cache_duration=86400, cache_location='var/cache/simple-useragent')
+    simple_ua = sua.UserAgents(max_retries=3, timeout=5, cache_duration=86400, cache_location='example/path/to/folder')
    ```
 &nbsp;
 
@@ -151,8 +153,6 @@ You can also use the convenience functions to get user agents without initializi
     
     get_dict()  # Returns a dictionary with all desktop and mobile user agents.
     # {'desktop': ['Mozilla/5.0 ...', ...] 'mobile': ['Mozilla/5.0 (iPhone ...', ...]}
-    
-    
    ```
 &nbsp;
 
@@ -170,7 +170,6 @@ The instance offers attributes for the user agent properties.
     obj['os_version']  # '10'
     obj['os_version_minor']  # '0'
     obj['mobile']  # True / False
-
    ```
 &nbsp;
 
