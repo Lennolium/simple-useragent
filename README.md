@@ -114,13 +114,13 @@ Just import the package and use the convenience functions. For more advanced usa
    ```python
     import simple_useragent as sua
 
-    sua.get(num=2, force_cached=True, mobile=True)
+    sua.get(num=2, mobile=True)  # List of the 2 most common mobile user agents (attributes explained below).
     # [UserAgent('Mozilla/5.0 (Android ...'), UserAgent('Mozilla/5.0 (iPhone; ...')]
     
-    sua.get_list()  # Returns a list of 45 or 23 (desktop/mobile) user agents as strings.
+    sua.get_list(shuffle=True, force_cached=True)  # Random list of available desktop user agents strings.
     # ['Mozilla/5.0 ...', 'Mozilla/5.0 (iPhone ...', 'Mozilla/5.0 (iPhone ...', ...]
     
-    sua.get_dict()  # Returns a dictionary with all desktop and mobile user agents.
+    sua.get_dict()  # Dictionary with all desktop and mobile user agents.
     # {'desktop': ['Mozilla/5.0 ...', ...] 'mobile': ['Mozilla/5.0 (iPhone ...', ...]}
    ```
 &nbsp;
@@ -137,7 +137,7 @@ Import the package and initialize the UserAgents class to set custom settings (o
 
 Fetching User Agents.
    ```python
-    # Fetch a specified number of random mobile user agent instances.
+    # Fetch a specified number of random mobile user agent instances (with settings from the class above).
     simple_ua.get(num=2, shuffle=True, mobile=True)
     # [UserAgent('Mozilla/5.0 (iPhone ...'), UserAgent('Mozilla/5.0 (iPhone; ...')]
    ```  
@@ -145,13 +145,13 @@ Fetching User Agents.
 
 You can also use the convenience functions to get user agents without initializing the class.
    ```python
-    sua.get(num=2, force_cached=True, mobile=True)
+    sua.get(num=2, mobile=True)  # List of the 2 most common mobile user agent (attributes explained below).
     # [UserAgent('Mozilla/5.0 (Android ...'), UserAgent('Mozilla/5.0 (iPhone; ...')]
     
-    sua.get_list()  # Returns a list of 45 or 23 (desktop/mobile) user agents as strings.
+    sua.get_list(force_cached=True)  # List of all available desktop user agents as strings.
     # ['Mozilla/5.0 ...', 'Mozilla/5.0 (iPhone ...', 'Mozilla/5.0 (iPhone ...', ...]
     
-    sua.get_dict()  # Returns a dictionary with all desktop and mobile user agents.
+    sua.get_dict()  # Dictionary with all desktop and mobile user agents.
     # {'desktop': ['Mozilla/5.0 ...', ...] 'mobile': ['Mozilla/5.0 (iPhone ...', ...]}
    ```
 &nbsp;
@@ -162,27 +162,19 @@ The instance offers attributes for the user agent properties.
     obj = sua.parse('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36')
     obj.string  # 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit ...'
     obj.browser  # 'Chrome', 'Firefox', 'Safari', 'Edge', 'IE', 'Opera', 'Whale', 'QQ Browser', 'Samsung Browser', 'Other'
-    obj.browser_version  # '110'
-    obj.browser_version_minor  # '0'
+    obj.browser_version  # '110', '109', '537', ...
+    obj.browser_version_minor  # '0', '1', '36', ...
 
     # You can also access the attributes with square brackets.
-    obj['os']  # Output: 'Windows', 'macOS', 'Linux', 'Android', 'iOS', 'Other'
-    obj['os_version']  # '10'
-    obj['os_version_minor']  # '0'
+    obj = sua.get(num=1, shuffle=True)[0]
+    obj['os']  # 'Windows', 'macOS', 'Linux', 'Android', 'iOS', 'Other'
+    obj['os_version']  # '10', '7', '11', '14', ...
+    obj['os_version_minor']  # '0', '1', '2', ...
     obj['mobile']  # True / False
    ```
 &nbsp;
 
 #### Settings and Parameters
-
-You can set custom preferences when initializing the class with `UserAgents(max_retries=3)`.
-
-- __max_retries:__ The maximum number of retries to reach the API, before falling back to local cache (default: _3_).
-- __timeout:__ The timeout in seconds for the API request (default: _5_).
-- __cache_duration:__ The duration in seconds for the user agents to be cached (default: _86400_ = 1 day).
-- __cache_location:__ The folder in which the user agents are cached, specific to the OS. You can see the default location with `UserAgents._cache_location`.
-
-&nbsp;
 
 The functions can take the following parameters:
 
@@ -190,6 +182,15 @@ The functions can take the following parameters:
 - __mobile:__ Fetch mobile or desktop user agents (default: _False_ = desktop).
 - __shuffle:__ Whether to shuffle/randomize the order of user agents (default: _False_ = ordered by usage).
 - __force_cached:__ Force the use of memory or file cached user agents (default: _None_ = fetches new user agents if cache is outdated, _False_ = always call the API, _True_ = always use the cache).
+
+&nbsp;
+
+You can set custom preferences when initializing the class with `UserAgents(...)`.
+
+- __max_retries:__ The maximum number of retries to reach the API, before falling back to local cache (default: _3_).
+- __timeout:__ The timeout in seconds for the API request (default: _5_).
+- __cache_duration:__ The duration in seconds for the user agents to be cached (default: _86400_ = 1 day).
+- __cache_location:__ The folder in which the user agents are cached, specific to the OS. You can see the default location with `UserAgents._cache_location`.
 
 &nbsp;
 
