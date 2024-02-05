@@ -24,11 +24,3 @@ __github__ = "https://github.com/Lennolium/simple-useragent"
 # Imports.
 from simple_useragent.core import (UserAgents, UserAgent, get_dict, get_list,
                                    get, parse)
-
-try:
-    from importlib import metadata
-except (ImportError, ModuleNotFoundError):
-    # Running on old Python -> use importlib-metadata package.
-    import importlib_metadata as metadata
-
-__version__ = metadata.version("simple-useragent")
