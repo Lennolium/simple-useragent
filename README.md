@@ -19,7 +19,7 @@
     <img src="https://app.codacy.com/project/badge/Grade/747e8fea69394b10a1f4627babddcf4f" alt="code quality" >
     <a></a>
    <a href="https://github.com/Lennolium/simple-useragent/commits/main" > 
-    <img src="https://img.shields.io/github/commit-activity/m/Lennolium/simple-useragent?label=Commit%20Activity" 
+    <img src="https://img.shields.io/github/commit-activity/m/Lennolium/simple-useragent?label=Commit%20Activity&color=yellow" 
 alt="commit activity" >
      <a></a>
   <a href="https://github.com/Lennolium/simple-useragent/releases" > 
@@ -30,8 +30,8 @@ alt="stable version" >
     <img src="https://img.shields.io/github/issues-raw/Lennolium/simple-useragent?label=Open%20Issues&color=critical" alt="open issues" >
   <a href="https://github.com/Lennolium/simple-useragent/issues?q=is%3Aissue+is%3Aclosed" > 
     <img src="https://img.shields.io/github/issues-closed-raw/Lennolium/simple-useragent?label=Closed%20Issues&color=inactive" alt="closed issues" > 
-     <a href="#" > 
-    <img src="https://img.shields.io/github/repo-size/Lennolium/simple-useragent?label=Repo%20Size&color=yellow" alt="repo size" >
+     <a href="https://pepy.tech/project/simple-useragent" > 
+    <img src="https://static.pepy.tech/badge/simple-useragent" alt="pypi downloads" >
   <a href="https://github.com/Lennolium/simple-useragent/blob/main/LICENSE" > 
     <img src="https://img.shields.io/github/license/Lennolium/simple-useragent?label=License&color=blueviolet" alt="License" > 
   <a></a> </a> </a> </a> </a> </a> </a> </a> </a>
@@ -236,7 +236,7 @@ Thank you so much for giving feedback, implementing features and improving the c
 
 ## Credits
 
-Full credits are in the [acknowledgments](https://github.com/Lennolium/simple-useragent/blob/main/ACKNOWLEDGMENTS) file.
+Full credits are in the [ACKNOWLEDGMENTS](https://github.com/Lennolium/simple-useragent/blob/main/ACKNOWLEDGMENTS) file.
 
 &nbsp;
 
