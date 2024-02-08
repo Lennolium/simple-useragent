@@ -14,21 +14,21 @@ parsed attributes.
 __author__ = "Lennart Haack"
 __email__ = "simple-useragent@lennolium.dev"
 __license__ = "GNU GPLv3"
-__version__ = "0.1.0"
-__date__ = "2024-01-31"
+__version__ = "0.1.1"
+__date__ = "2024-02-08"
 __status__ = "Development"
 __github__ = "https://github.com/Lennolium/simple-useragent"
 
 # Imports.
-import os.path
-import time
-import random
 import json
 import logging
+import os.path
 import pathlib
+import time
+import random
 
-import requests
 import platformdirs
+import requests
 from bs4 import BeautifulSoup
 from ua_parser import user_agent_parser
 
@@ -154,10 +154,11 @@ class UserAgent:
         :rtype: bool
         """
 
-        if not isinstance(other, UserAgent):
-            raise TypeError("Can not compare UserAgent with other "
-                            "types than UserAgent."
-                            )
+        if not isinstance(other, self.__class__):
+            raise TypeError(
+                    f"Can not compare {self.__class__.__name__} with other "
+                    f"types than {self.__class__.__name__}."
+                    )
 
         return self.string == other.string
 
@@ -390,15 +391,15 @@ class UserAgents:
     the user agents locally to avoid unnecessary API calls. The cached
     user agents are refreshed every 24 hours.
 
-    :var _max_retries: Maximum number of retries to fetch the user
-        agents from the API (default=3).
+    :var max_retries: Maximum number of retries to fetch the user
+        agents from the API (default=3).XXX
     :type max_retries: int
-    :var _timeout: Timeout in seconds for the API request (default=5).
+    :var timeout: Timeout in seconds for the API request (default=5).
     :type timeout: int
-    :var _cache_duration: The duration in seconds after which the
+    :var cache_duration: The duration in seconds after which the
         cached user agents are refreshed (default=86400).
     :type cache_duration: int
-    :var _cache_location: The folder to save the cached user agents in.
+    :var cache_location: The folder to save the cached user agents in.
     :type cache_location: str
     """
 
@@ -412,44 +413,45 @@ class UserAgents:
             cache_location: str = platformdirs.user_cache_dir(
                     appname="simple-useragent",
                     appauthor="Lennolium",
-                    ensure_exists=True
-                    )
+                    ensure_exists=True,
+                    ),
             ) -> None:
         """
         Create a new UserAgents object, which can be used to fetch user
         agents from the public useragents.me API, cache them locally and
         return them as a string/list, dict or object (see examples).
 
-        # Initialize the class to set custom settings.
-        user_agents = UserAgents(max_retries=5, timeout=10, ...)
+        - Initialize the class to set custom settings:
+        import simple_useragent as sua \n
+        user_agents = sua.UserAgents(max_retries=5, timeout=10, ...)
 
-        # Fetch a two random mobile user agent instances. \n
-        user_agents.get(num=2, shuffle=True, mobile=True)
+        - Fetch two random mobile user agent instances:
+        user_agents.get(num=2, shuffle=True, mobile=True) \n
         >> [UserAgent('Mozilla/5.0 (iPhone ...'), UserAgent(
         'Mozilla/5.0 (iPhone; ...')]
 
-        # The functions have a convenience counterpart.
-        obj = get(num=1, force_cached=True)
-        obj[0].string  >>  'Mozilla/5.0 (Windows ...'
+        - The functions have a convenience counterpart:
+        obj = sua.get(num=1, force_cached=True) \n
+        obj[0].string  >>  'Mozilla/5.0 (Windows ...' \n
         obj[0].os  >>  'Windows'
 
-        # Fetch the 3 most common desktop user agents as str in a list.
-        get_list(num=3)
+        - Fetch the 3 most common desktop user agents as str in a list:
+        sua.get_list(num=3) \n
         >> ['Mozilla/5.0 (Windows ...', '...', '...']
 
-        # Get all desktop and mobile user agents in a dict sorted by
-        # usage percentage.
-        get_dict()
+        - Get all desktop and mobile user agents in a dict sorted by
+          usage percentage:
+        sua.get_dict() \n
         >> {'desktop': ['Mozilla/5.0 (Windows ...', '...'],
-            'mobile': ['Mozilla/5.0 (Android ...', '...']}
+        'mobile': ['Mozilla/5.0 (Android ...', '...']} \n
 
-        # Parse single user agent string and create a UserAgent object.
-        ua = UserAgent('Mozilla/5.0 (Windows, Chrome ...')
-        ua.browser  >>  'Chrome'
-        ua.browser_version  >>  '91'
+        - Parse single user agent string and create a UserAgent object.
+        ua = sua.UserAgent('Mozilla/5.0 (Windows, Chrome ...') \n
+        ua.browser  >>  'Chrome' \n
+        ua.browser_version  >>  '91' \n
 
-        # Parse a single user agent string and create UserAgent object.
-        parse('Mozilla/5.0 (iPhone, Safari ...')
+        - Parse a single user agent string and create UserAgent object.
+        sua.parse('Mozilla/5.0 (iPhone, Safari ...') \n
         >> UserAgent('Mozilla/5.0 (iPhone, Safari ...')
 
         :param max_retries: Maximum number of retries to fetch the user
@@ -786,7 +788,9 @@ class UserAgents:
             force_cached: bool = None,
             ) -> dict[str, list[str]]:
         """
-        Collects a dict of desktop and mobile user agents.
+        Collects a dict of all available user agents as strings in a
+        list for each desktop and mobile device. The user agents are
+        sorted by usage percentage.
 
         :param force_cached: If True, forces the use of local file
             cached user agents, if False, forces the use of the API
@@ -878,10 +882,10 @@ class UserAgents:
             mobile: bool = False,
             shuffle: bool = False,
             force_cached: bool = None,
-
             ) -> list[str]:
+
         """
-        Fetches a list of usage weighted user agents.
+        Fetches a list of usage weighted user agents as strings.
 
         :param num: The number of user agents to fetch (desktop=45,
             mobile=23).
@@ -921,7 +925,7 @@ class UserAgents:
             force_cached: bool = None,
             ) -> list[UserAgent]:
         """
-        Fetches a list of usage weighted user agents.
+        Fetches a list of usage weighted user agents as instances.
 
         :param num: The number of user agents to fetch (default:
             desktop=45, mobile=23).
@@ -937,8 +941,6 @@ class UserAgents:
         :return: A list of UserAgent instances.
         :rtype: list[UserAgent]
         """
-        # self.__fallback()
-        # return
 
         # Check if the requested number of user agents is valid.
         num, device = self.__check_num(num, mobile)
