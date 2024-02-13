@@ -18,8 +18,8 @@ The tests can be run with the following command:
 __author__ = "Lennart Haack"
 __email__ = "simple-useragent@lennolium.dev"
 __license__ = "GNU GPLv3"
-__version__ = "0.1.1"
-__date__ = "2024-02-08"
+__version__ = "0.1.2"
+__date__ = "2024-02-13"
 __status__ = "Development"
 __github__ = "https://github.com/Lennolium/simple-useragent"
 
@@ -31,7 +31,8 @@ import time
 from requests.models import Response
 import unittest
 from unittest.mock import Mock, patch, mock_open
-from simple_useragent.core import (UserAgent, UserAgents, _FALLBACK_DESKTOP,
+from simple_useragent.core import (UserAgent, UserAgents,
+                                   _FALLBACK_DESKTOP,
                                    _FALLBACK_MOBILE, user_agent_parser)
 import responses
 
@@ -802,14 +803,22 @@ class TestUserAgents(unittest.TestCase):
     # Test shuffle of get method.
     def test_get_shuffle(self):
         with patch.object(UserAgents, 'get_dict') as mock_get_dict:
+            # Generate a dict with a list of many mock user agents.
             mock_get_dict.return_value = {
-                    "desktop": ["Mozilla/1.0", "Mozilla/2.0", "Mozilla/3.0"],
-                    "mobile": ["Mozilla/4.0", "Mozilla/5.0", "Mozilla/6.0"]
+                    "desktop": [f"ua_desktop{i}" for i in range(45)],
+                    "mobile": [f"ua_mobile{i}" for i in range(23)]
                     }
-            result1 = self.user_agents.get(num=3, shuffle=True)
-            result2 = self.user_agents.get(num=3, shuffle=True)
+
+            result1 = self.user_agents.get(num=45, shuffle=True)
+            result2 = self.user_agents.get(num=45, shuffle=True)
+            result3 = self.user_agents.get(num=23, shuffle=True, mobile=True)
+            result4 = self.user_agents.get(num=23, shuffle=True, mobile=True)
+
             self.assertNotEqual([ua.string for ua in result1],
                                 [ua.string for ua in result2]
+                                )
+            self.assertNotEqual([ua.string for ua in result3],
+                                [ua.string for ua in result4]
                                 )
 
     # Test all public methods of the module with correct data.

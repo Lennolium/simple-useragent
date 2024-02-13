@@ -1,7 +1,4 @@
 beautifulsoup4==4.12.3
 platformdirs==4.2.0
 requests==2.31.0
-soupsieve==2.5
 ua-parser==0.18.0
-urllib3==2.2.0
-responses==0.24.1

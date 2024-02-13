@@ -23,7 +23,7 @@
 alt="commit activity" >
      <a></a>
   <a href="https://github.com/Lennolium/simple-useragent/releases" > 
-    <img src="https://img.shields.io/badge/Version-0.1.0-brightgreen" 
+    <img src="https://img.shields.io/badge/Version-0.1.2-brightgreen" 
 alt="stable version" >
      <br>
   <a href="https://github.com/Lennolium/simple-useragent/issues" > 
@@ -50,7 +50,9 @@ Fetches real world, up-to-date user agents for use in web scraping to avoid bot 
 No more fake or outdated user agents, only user agents of real users.
 You can either get random or usage-weighted user agents. It caches
 the user agents locally to avoid unnecessary API calls, and refreshes them automatically every 24 hours
-from the public API of <a href="https://useragents.me/">useragents.me</a>. <br><br>
+from the public API of <a href="https://useragents.me/">useragents.me</a>. If you need full-fledge fake browser
+headers including client hints like sec-ch-ua, sec-fetch-site and more, check out my 
+<a href="https://github.com/Lennolium/simple-header">simple-header</a> package.<br><br>
 
 [![Donate](https://img.shields.io/badge/Donate-Paypal-blue?style=flat-square&logo=paypal)](https://www.paypal.me/smogg)
 [![BuyMeACoffee](https://img.shields.io/badge/Buy%20me%20a-Coffee-f5d132?style=flat-square&logo=buymeacoffee)](https://buymeacoffee.com/lennolium)
@@ -83,9 +85,10 @@ from the public API of <a href="https://useragents.me/">useragents.me</a>. <br><
 
 - __Up-to-date:__ No fake or outdated user agents. `Only real world data`, refreshed every 24 hours.
 - __Wide Support:__ User Agents for Windows, macOS, Linux, Android and iOS devices: Google Chrome, Firefox, Safari, Edge, Opera, Whale and QQ browsers.
-- __Lightweight:__ Designed to consume minimal system resources and caches user agents locally.
+- __Lightweight:__ Caches user agents locally to consume minimal system resources.
 - __Simple:__ Easy to use and understand with a clean and simple API.
 - __Compatible:__ Supports `Python 3.8 and above`. Runs on Windows, macOS and Linux.
+- __Tested:__ Has 99% test coverage and is continuously tested.
 - __Privacy:__ Protects the user by not collecting or sending any personal data.
 - __Open Source:__ Provides transparency and allows community contributions for continuous development.
 
