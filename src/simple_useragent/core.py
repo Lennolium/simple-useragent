@@ -14,8 +14,8 @@ parsed attributes.
 __author__ = "Lennart Haack"
 __email__ = "simple-useragent@lennolium.dev"
 __license__ = "GNU GPLv3"
-__version__ = "0.1.1"
-__date__ = "2024-02-08"
+__version__ = "0.1.2"
+__date__ = "2024-02-13"
 __status__ = "Development"
 __github__ = "https://github.com/Lennolium/simple-useragent"
 
@@ -44,6 +44,11 @@ _FALLBACK_DESKTOP = ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
 _FALLBACK_MOBILE = ["Mozilla/5.0 (Linux; Android 10; K) "
                     "AppleWebKit/537.36 (KHTML, like Gecko) "
                     "Chrome/120.0.0.0 Mobile Safari/537.3"]
+
+_FALLBACK_JSON = pathlib.Path(os.path.dirname(__file__),
+                              "data",
+                              "fallback.json"
+                              )
 
 _SUPPORTED_BROWSERS = ["Chrome", "Firefox", "Safari", "Opera", "Edge",
                        "IE", "Samsung Browser", "Whale", "QQ Browser"]
@@ -483,7 +488,7 @@ class UserAgents:
                 f"cache_location={self._cache_location!r})")
 
     @staticmethod
-    def __convert_to_list(response_data: list[dict]) -> list[str] | list[None]:
+    def __convert_to_list(response_data: list) -> list:
         """
         Converts the response data from API to a list of user agents,
         sorted by usage percentage.
@@ -511,7 +516,7 @@ class UserAgents:
         return ua_list
 
     @staticmethod
-    def __fallback() -> None | dict:
+    def __fallback() -> dict:
         """
         Uses fallback user agents placed in the module root, if API is
         not reachable and no cached version is available eventually due
@@ -524,26 +529,24 @@ class UserAgents:
 
         # Load cached user agents from json file.
         try:
-            fp = pathlib.Path(os.path.dirname(__file__),
-                              "fallback.json"
-                              )
 
-            with open(fp, "r") as fh:
+            with open(_FALLBACK_JSON, "r") as fh:
                 response_data = json.load(fh)
 
             return response_data
 
         except Exception as e:
-            LOGGER.warning(
-                    f"Could not load historic file 'fallback.json': "
-                    f"{str(e.__class__.__name__)}: {str(e)}"
-                    )
+            LOGGER.error(f"Could not find fallback file, that is shipped "
+                         f"with the package! Verify that the file exists "
+                         f"and if it does, report the issue please.\n"
+                         f"{str(e.__class__.__name__)}: {str(e)}"
+                         )
             return None
 
     def __response_data(
             self,
             url: str
-            ) -> None | requests.Response:
+            ) -> requests.Response:
         """
         Tries to reach the API for maximum of _max_retries times and
         returns the response data or None if API could not be reached.
@@ -609,7 +612,7 @@ class UserAgents:
 
     def __useragents_api(
             self,
-            ) -> None | dict:
+            ) -> dict:
         """
         Fetches user agents from the public useragents.me API.
 
@@ -684,7 +687,7 @@ class UserAgents:
                 )
         return None
 
-    def __useragents_cached(self) -> None | dict:
+    def __useragents_cached(self) -> dict:
         """
         Fetches user agents from the local cache.
 
@@ -735,7 +738,7 @@ class UserAgents:
     @staticmethod
     def __check_num(num: int,
                     mobile: bool
-                    ) -> tuple[int, str]:
+                    ) -> tuple:
         """
         Checks if the requested number of user agents is valid.
 
@@ -786,7 +789,7 @@ class UserAgents:
     def get_dict(
             self,
             force_cached: bool = None,
-            ) -> dict[str, list[str]]:
+            ) -> dict:
         """
         Collects a dict of all available user agents as strings in a
         list for each desktop and mobile device. The user agents are
@@ -882,7 +885,7 @@ class UserAgents:
             mobile: bool = False,
             shuffle: bool = False,
             force_cached: bool = None,
-            ) -> list[str]:
+            ) -> list:
 
         """
         Fetches a list of usage weighted user agents as strings.
@@ -913,7 +916,7 @@ class UserAgents:
                 )[device]
 
         if shuffle:
-            uas = random.choices(uas, k=num)
+            uas = random.SystemRandom().choices(uas, k=num)
 
         return uas[:num]
 
@@ -923,7 +926,7 @@ class UserAgents:
             mobile: bool = False,
             shuffle: bool = False,
             force_cached: bool = None,
-            ) -> list[UserAgent]:
+            ) -> list:
         """
         Fetches a list of usage weighted user agents as instances.
 
@@ -950,7 +953,7 @@ class UserAgents:
                 )[device]
 
         if shuffle:
-            uas = random.choices(uas, k=num)
+            uas = random.SystemRandom().choices(uas, k=num)
 
         return [UserAgent(ua) for ua in uas[:num] if ua]
 
@@ -960,3 +963,10 @@ get_list = UserAgents().get_list
 get_dict = UserAgents().get_dict
 get = UserAgents().get
 parse = UserAgent
+
+# Test:
+lol = get_list(num=3, force_cached=False)
+print("OK?", lol)
+print("OK?", get_dict(force_cached=True))
+print("OK?", get(num=3, mobile=True, shuffle=True))
+print("OK?", parse(lol[0]))
