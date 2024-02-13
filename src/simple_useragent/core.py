@@ -14,7 +14,7 @@ parsed attributes.
 __author__ = "Lennart Haack"
 __email__ = "simple-useragent@lennolium.dev"
 __license__ = "GNU GPLv3"
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 __date__ = "2024-02-13"
 __status__ = "Development"
 __github__ = "https://github.com/Lennolium/simple-useragent"
@@ -963,10 +963,3 @@ get_list = UserAgents().get_list
 get_dict = UserAgents().get_dict
 get = UserAgents().get
 parse = UserAgent
-
-# Test:
-lol = get_list(num=3, force_cached=False)
-print("OK?", lol)
-print("OK?", get_dict(force_cached=True))
-print("OK?", get(num=3, mobile=True, shuffle=True))
-print("OK?", parse(lol[0]))
