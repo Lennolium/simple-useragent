@@ -191,10 +191,9 @@ done
 cd .. || exit
 
 
-# Upload build to PyPI. Credentials are in '~.pypirc'.
+# Upload build to PyPI. Credentials are in '~.pypirc' or env variables.
 _info "Uploading to the built package PyPI ..."
-twine upload --repository pypi ./dist/*.tar.gz ./dist/*.whl && _success || _failed
-# _warn "Upload to PyPI is disabled. You need to uncomment it" && _warn
+# twine upload --repository pypi ./dist/*.tar.gz ./dist/*.whl && _success || _failed
 
 # Exit out of virtual environment, cleanup egg files and delete venv.
 _info "Cleaning up ..."

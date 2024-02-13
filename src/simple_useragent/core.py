@@ -9,6 +9,7 @@ responsible for parsing and fetching user agents from the public
 class to parse a single, custom user agent string and gain access to its
 parsed attributes. 
 """
+from __future__ import annotations
 
 # Header.
 __author__ = "Lennart Haack"
@@ -130,7 +131,7 @@ class UserAgent:
 
         return f"{self.__class__.__name__}({self.string!r})"
 
-    def __dict__(self) -> dict:
+    def __dict__(self) -> dict[str, str]:
         """
         Returns the user agent instance as a dictionary.
 
@@ -167,7 +168,7 @@ class UserAgent:
 
         return self.string == other.string
 
-    def __getitem__(self, item):
+    def __getitem__(self, item) -> str:
         """
         Returns the value of the given item.
 
@@ -185,7 +186,7 @@ class UserAgent:
                     f"{item}'."
                     )
 
-    def __setitem__(self, item, value):
+    def __setitem__(self, item, value) -> None:
         """
         Sets the value of the given item.
 
@@ -203,7 +204,7 @@ class UserAgent:
                     f"{item}'."
                     )
 
-    def __delitem__(self, item):
+    def __delitem__(self, item) -> None:
         """
         Deletes the given item.
 
@@ -480,7 +481,12 @@ class UserAgents:
         self._cache_duration = cache_duration
         self._cache_location = cache_location
 
-    def __repr__(self):
+    def __repr__(self) -> str:
+        """
+        Returns the UserAgents instance as a representation for fast
+        reconstruction.
+        """
+
         return (f"{self.__class__.__name__}"
                 f"(max_retries={self._max_retries!r}, "
                 f"timeout={self._timeout!r}, "
@@ -488,7 +494,7 @@ class UserAgents:
                 f"cache_location={self._cache_location!r})")
 
     @staticmethod
-    def __convert_to_list(response_data: list) -> list:
+    def __convert_to_list(response_data: list[dict]) -> list[str]:
         """
         Converts the response data from API to a list of user agents,
         sorted by usage percentage.
@@ -516,7 +522,7 @@ class UserAgents:
         return ua_list
 
     @staticmethod
-    def __fallback() -> dict:
+    def __fallback() -> dict[str, list[str]] | None:
         """
         Uses fallback user agents placed in the module root, if API is
         not reachable and no cached version is available eventually due
@@ -541,12 +547,12 @@ class UserAgents:
                          f"and if it does, report the issue please.\n"
                          f"{str(e.__class__.__name__)}: {str(e)}"
                          )
-            return None
+            return
 
     def __response_data(
             self,
             url: str
-            ) -> requests.Response:
+            ) -> requests.Response | None:
         """
         Tries to reach the API for maximum of _max_retries times and
         returns the response data or None if API could not be reached.
@@ -554,7 +560,7 @@ class UserAgents:
         :param url: The url to reach.
         :type url: str
         :return: The response data or None if API could not be reached.
-        :rtype: None or requests.Response
+        :rtype: requests.Response or None
         """
 
         # Try to reach API for maximum 3 times (default).
@@ -590,7 +596,7 @@ class UserAgents:
                         f"({i}/{self._max_retries}) Rate limit reached for "
                         f"'useragents.me' (15 requests/h)."
                         )
-                return None
+                return
 
             # If status code indicates no success or maybe a rate-limit,
             # retry after delay.
@@ -608,11 +614,11 @@ class UserAgents:
             else:
                 return response
 
-        return None
+        return
 
     def __useragents_api(
             self,
-            ) -> dict:
+            ) -> dict | None:
         """
         Fetches user agents from the public useragents.me API.
 
@@ -635,7 +641,7 @@ class UserAgents:
             response = self.__response_data(endpoint)
 
             if not response:
-                return None
+                return
 
             # For desktop UA, we can use the json response of the API.
             if device == "desktop":
@@ -647,7 +653,7 @@ class UserAgents:
                                 "Rate limit reached for 'useragents.me' "
                                 "(15 requests/h)."
                                 )
-                        return None
+                        return
 
                 response_data["desktop"] = \
                     self.__convert_to_list(response.json()["data"])
@@ -674,7 +680,7 @@ class UserAgents:
                                    f"'useragents.me': "
                                    f"{str(e.__class__.__name__)}: {str(e)}"
                                    )
-                    return None
+                    return
 
         if response_data["desktop"] and response_data["mobile"]:
             # Add current unix timestamp to response data.
@@ -685,9 +691,9 @@ class UserAgents:
                 f"Could not reach 'useragents.me' API after "
                 f"{self._max_retries} failed retries."
                 )
-        return None
+        return
 
-    def __useragents_cached(self) -> dict:
+    def __useragents_cached(self) -> dict[str, list[str] | int] | None:
         """
         Fetches user agents from the local cache.
 
@@ -711,14 +717,14 @@ class UserAgents:
             LOGGER.info(
                     "No cached 'user_agents.json' found. Maybe your first run?"
                     )
-            return None
+            return
 
         except Exception as e:
             LOGGER.warning(
                     f"Could not load cached 'user_agents.json': "
                     f"{str(e.__class__.__name__)}: {str(e)}"
                     )
-            return None
+            return
 
     def __check_cached(self) -> bool:
         """
@@ -738,7 +744,7 @@ class UserAgents:
     @staticmethod
     def __check_num(num: int,
                     mobile: bool
-                    ) -> tuple:
+                    ) -> tuple[int, str]:
         """
         Checks if the requested number of user agents is valid.
 
@@ -789,7 +795,7 @@ class UserAgents:
     def get_dict(
             self,
             force_cached: bool = None,
-            ) -> dict:
+            ) -> dict[str, list[str] | int]:
         """
         Collects a dict of all available user agents as strings in a
         list for each desktop and mobile device. The user agents are
@@ -885,7 +891,7 @@ class UserAgents:
             mobile: bool = False,
             shuffle: bool = False,
             force_cached: bool = None,
-            ) -> list:
+            ) -> list[str]:
 
         """
         Fetches a list of usage weighted user agents as strings.
@@ -902,9 +908,8 @@ class UserAgents:
             cached user agents, if False, forces the use of the API
             (default=None).
         :type force_cached: bool
-        :return: A user agent string or a list of user agents if
-            optional num parameter greater than 1 is passed.
-        :rtype: str or list[str]
+        :return: A list of user agents as strings.
+        :rtype: list[str]
         """
 
         # Check if the requested number of user agents is valid.
@@ -926,7 +931,7 @@ class UserAgents:
             mobile: bool = False,
             shuffle: bool = False,
             force_cached: bool = None,
-            ) -> list:
+            ) -> list[UserAgent]:
         """
         Fetches a list of usage weighted user agents as instances.
 
@@ -963,3 +968,7 @@ get_list = UserAgents().get_list
 get_dict = UserAgents().get_dict
 get = UserAgents().get
 parse = UserAgent
+
+print(get_list(5))
+print(get_dict())
+print(get(5))
