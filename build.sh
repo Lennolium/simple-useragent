@@ -44,7 +44,8 @@ esac
 
 # Save name and version of the package from __init__.py in src folder.
 package_directory=$(find src -mindepth 2 -maxdepth 2 -type f -name '__init__.py' -exec dirname {} \;)
-package_name=$(basename "$package_directory")
+package_name=$(basename "$package_directory")  # e.g. my_package
+package_name_github=${package_name//_/-}  # e.g. my-package
 version=$(grep '__version__ =' "$package_directory/__init__.py" | sed -E 's/^.*"([^"]+)".*$/\1/')
 
 # Get the minimum required Python version from setup.cfg.
@@ -151,13 +152,10 @@ else
 fi
 
 # Override the version variable of setup.cfg with the version number of __init__.py.
-_info "Updating the version variable in 'setup.cfg' to $version ..."
+_info "Updating the version in 'setup.cfg' and 'README.md' to $version ..."
 tmpfile=$(mktemp)
 sed "s/^version =.*/version = $version/" setup.cfg > "$tmpfile"
-mv "$tmpfile" setup.cfg && _success || _failed
-
-# Update the version badge in README.md.
-_info "Updating the version badge in 'README.md' to $version ..."
+mv "$tmpfile" setup.cfg
 tmpfile=$(mktemp)
 sed "s|https://img.shields.io/badge/Version-.*-brightgreen|https://img.shields.io/badge/Version-$version-brightgreen|" README.md > "$tmpfile"
 mv "$tmpfile" README.md && _success || _failed
@@ -185,23 +183,58 @@ for file in *.sha256; do
     if sha256sum -c "$file" >> ../trace.log 2>&1; then
         printf " Checking $file: \033[0m\033[32mPASSED\033[0m \n"
     else
-        printf " Checking $file:" && _failed
+        printf " Checking $file: \033[1m\033[31mNOT PASSED\033[0m \n" && _failed
     fi
 done
 cd .. || exit
 
 
 # Upload build to PyPI. Credentials are in '~.pypirc'.
-_info "Uploading to the built package PyPI ..."
-twine upload --repository pypi ./dist/*.tar.gz ./dist/*.whl && _success || _failed
-# _warn "Upload to PyPI is disabled. You need to uncomment it" && _warn
+_info "Uploading to the built package PyPI ...\n"
+# twine upload --repository pypi ./dist/*.tar.gz ./dist/*.whl && _success || _failed
+
 
 # Exit out of virtual environment, cleanup egg files and delete venv.
-_info "Cleaning up ..."
+_info "Intermission clean up ..."
 deactivate
 sleep 2
 rm -rf ./.buildvenv
 rm -rf "./src/${package_name}.egg-info" && _success || _failed
+
+
+# Reflect all changes to git, commit and push to dev branch on GitHub.
+_info "Adding all files to git ..."
+git add .github >> trace.log 2>&1
+git add -A >> trace.log 2>&1 && _success || _failed
+_info "Creating tag: 'v$version' ..."
+git tag "v$version" >> trace.log 2>&1 && _success || _failed
+_info "Committing with message: 'v$version' ..."
+git commit -m "v$version" >> trace.log 2>&1 && _success || _failed
+_info "Pushing to GitHub (dev) ..."
+git push origin dev --tags --force >> trace.log 2>&1 && _success || _failed
+
+# Creating pull request to main branch.
+_info "Creating a pull request to merge dev into main ..."
+pr_title="Merge dev into main $(date +'%Y%m%d%H%M%S')"
+gh pr create --base main --head dev --title "$pr_title" --body "Automated pull request to merge dev into main." >> trace.log 2>&1 && _success || _failed
+
+# Approve the pull request (permissions required).
+_info "Approving the pull request ..."
+pr_number=$(gh pr list | grep "$pr_title" | awk '{print $1}')
+gh pr merge "$pr_number" --merge --admin >> trace.log 2>&1 && _success || _failed
+
+
+# Create a new GitHub release and upload dist files.
+_info "Creating a new GitHub release and uploading distribution files ..."
+cp .github/RELEASE_NOTES_TEMPLATE.md temp.md
+sed -i '' "s/\$VERSION_NUMBER/$version/g" temp.md
+sed -i '' "s/\$PACKAGE_NAME/$package_name_github/g" temp.md
+gh release create "v$version" ./dist/* --title "v$version" --notes-file temp.md --target main >> trace.log 2>&1 && _success || _failed
+
+
+_info "FINISHED! Cleaning up ..."
+rm temp.md
+sleep 1 && _success || _failed
 
 
 _info "Exiting ..."
