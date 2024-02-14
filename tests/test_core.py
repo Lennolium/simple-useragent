@@ -13,13 +13,14 @@ many edge cases as possible to ensure the stability of the package.
 The tests can be run with the following command:
     $ python -m unittest tests.test_core
 """
+from __future__ import annotations
 
 # Header.
 __author__ = "Lennart Haack"
 __email__ = "simple-useragent@lennolium.dev"
 __license__ = "GNU GPLv3"
-__version__ = "0.1.3"
-__date__ = "2024-02-13"
+__version__ = "0.1.4"
+__date__ = "2024-02-14"
 __status__ = "Development"
 __github__ = "https://github.com/Lennolium/simple-useragent"
 
@@ -28,6 +29,8 @@ import json
 import os.path
 import pathlib
 import time
+
+import simple_useragent
 from requests.models import Response
 import unittest
 from unittest.mock import Mock, patch, mock_open
@@ -793,8 +796,15 @@ class TestUserAgents(unittest.TestCase):
     def test_get_list_shuffle(self):
         with patch.object(UserAgents, 'get_dict') as mock_get_dict:
             mock_get_dict.return_value = {
-                    "desktop": ["Mozilla/1.0", "Mozilla/2.0", "Mozilla/3.0"],
-                    "mobile": ["Mozilla/4.0", "Mozilla/5.0", "Mozilla/6.0"]
+                    "desktop": ["Mozilla/1.0", "Mozilla/2.0", "Mozilla/3.0",
+                                "Mozilla/4.0", "Mozilla/5.0", "Mozilla/6.0",
+                                "Mozilla/7.0", "Mozilla/8.0", "Mozilla/9.0",
+                                "Mozilla/10.0", "Mozilla/11.0", "Mozilla/12.0",
+                                ],
+                    "mobile": ["Mozilla/1.0", "Mozilla/2.0", "Mozilla/3.0",
+                               "Mozilla/4.0", "Mozilla/5.0", "Mozilla/6.0",
+                               "Mozilla/7.0", "Mozilla/8.0", "Mozilla/9.0",
+                               "Mozilla/10.0", "Mozilla/11.0", "Mozilla/12.0"]
                     }
             result1 = self.user_agents.get_list(num=3, shuffle=True)
             result2 = self.user_agents.get_list(num=3, shuffle=True)
