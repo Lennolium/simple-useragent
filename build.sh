@@ -211,7 +211,7 @@ git tag "v$version" >> trace.log 2>&1 && _success || _failed
 _info "Committing with message: 'v$version' ..."
 git commit -m "v$version" >> trace.log 2>&1 && _success || _failed
 _info "Pushing to GitHub (dev) ..."
-git push origin dev --tags >> trace.log 2>&1 && _success || _failed
+git push origin dev --tags --force >> trace.log 2>&1 && _success || _failed
 
 # Creating pull request to main branch.
 _info "Creating a pull request to merge dev into main ..."
