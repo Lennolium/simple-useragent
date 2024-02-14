@@ -190,28 +190,38 @@ cd .. || exit
 
 
 # Upload build to PyPI. Credentials are in '~.pypirc'.
-_info "Uploading to the built package PyPI ..."
-twine upload --repository pypi ./dist/*.tar.gz ./dist/*.whl && _success || _failed
+_info "Uploading to the built package PyPI ...\n"
+# twine upload --repository pypi ./dist/*.tar.gz ./dist/*.whl && _success || _failed
+
+
+# Exit out of virtual environment, cleanup egg files and delete venv.
+_info "Intermission clean up ..."
+deactivate
+sleep 2
+rm -rf ./.buildvenv
+rm -rf "./src/${package_name}.egg-info" && _success || _failed
+
 
 # Reflect all changes to git, commit and push to dev branch on GitHub.
-_info "Reflecting all files additions/deletions to git ..."
+_info "Adding all files to git ..."
 git add .github >> trace.log 2>&1
 git add -A >> trace.log 2>&1 && _success || _failed
-_info "Committing with message and tag: 'v$version' ..."
-git tag "v$version" >> trace.log 2>&1
+_info "Creating tag: 'v$version' ..."
+git tag "v$version" >> trace.log 2>&1 && _success || _failed
+_info "Committing with message: 'v$version' ..."
 git commit -m "v$version" >> trace.log 2>&1 && _success || _failed
-_info "Pushing to GitHub ..."
+_info "Pushing to GitHub (dev) ..."
 git push origin dev --tags >> trace.log 2>&1 && _success || _failed
 
 # Creating pull request to main branch.
 _info "Creating a pull request to merge dev into main ..."
 pr_title="Merge dev into main $(date +'%Y%m%d%H%M%S')"
-gh pr create --base main --head dev --title "$pr_title" --body "Automated pull request to merge dev into main." >> ../trace.log 2>&1 && _success || _failed
+gh pr create --base main --head dev --title "$pr_title" --body "Automated pull request to merge dev into main." >> trace.log 2>&1 && _success || _failed
 
 # Approve the pull request (permissions required).
 _info "Approving the pull request ..."
 pr_number=$(gh pr list | grep "$pr_title" | awk '{print $1}')
-gh pr merge "$pr_number" --merge >> trace.log 2>&1 && _success || _failed
+gh pr merge "$pr_number" --merge --admin >> trace.log 2>&1 && _success || _failed
 
 
 # Create a new GitHub release and upload dist files.
@@ -219,15 +229,12 @@ _info "Creating a new GitHub release and uploading distribution files ..."
 cp .github/RELEASE_NOTES_TEMPLATE.md temp.md
 sed -i '' "s/\$VERSION_NUMBER/$version/g" temp.md
 sed -i '' "s/\$PACKAGE_NAME/$package_name_github/g" temp.md
-gh release create "v$version" ./dist/* --title "v$version" --notes-file temp.md --target main >> ../trace.log 2>&1 && _success || _failed
+gh release create "v$version" ./dist/* --title "v$version" --notes-file temp.md --target main >> trace.log 2>&1 && _success || _failed
 
-# Exit out of virtual environment, cleanup egg files and delete venv.
-_info "Cleaning up ..."
-deactivate
-sleep 2
+
+_info "FINISHED! Cleaning up ..."
 rm temp.md
-rm -rf ./.buildvenv
-rm -rf "./src/${package_name}.egg-info" && _success || _failed
+sleep 1 && _success || _failed
 
 
 _info "Exiting ..."
