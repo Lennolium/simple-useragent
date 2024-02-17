@@ -7,7 +7,7 @@ This module contains the UserAgent and UserAgents classes, which are
 responsible for parsing and fetching user agents from the public
 'useragents.me' API and caching them locally. You can use the UserAgent
 class to parse a single, custom user agent string and gain access to its
-parsed attributes. 
+parsed attributes.
 """
 from __future__ import annotations
 
@@ -39,20 +39,32 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"))
 
 # Fallback user agents if API is not reachable and no cached version
 # is available.
-_FALLBACK_DESKTOP = ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-                     "AppleWebKit/537.36 (KHTML, like Gecko) "
-                     "Chrome/110.0.0.0 Safari/537.36"]
-_FALLBACK_MOBILE = ["Mozilla/5.0 (Linux; Android 10; K) "
-                    "AppleWebKit/537.36 (KHTML, like Gecko) "
-                    "Chrome/120.0.0.0 Mobile Safari/537.3"]
+_FALLBACK_DESKTOP = [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/110.0.0.0 Safari/537.36"
+        ]
+_FALLBACK_MOBILE = [
+        "Mozilla/5.0 (Linux; Android 10; K) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/120.0.0.0 Mobile Safari/537.3"
+        ]
 
-_FALLBACK_JSON = pathlib.Path(os.path.dirname(__file__),
-                              "data",
-                              "fallback.json"
-                              )
+_FALLBACK_JSON = pathlib.Path(
+        os.path.dirname(__file__), "data", "fallback.json"
+        )
 
-_SUPPORTED_BROWSERS = ["Chrome", "Firefox", "Safari", "Opera", "Edge",
-                       "IE", "Samsung Browser", "Whale", "QQ Browser"]
+_SUPPORTED_BROWSERS = [
+        "Chrome",
+        "Firefox",
+        "Safari",
+        "Opera",
+        "Edge",
+        "IE",
+        "Samsung Browser",
+        "Whale",
+        "QQ Browser",
+        ]
 _SUPPORTED_OS = ["Windows", "macOS", "Linux", "Android", "iOS"]
 
 
@@ -84,15 +96,17 @@ class UserAgent:
 
         # Validate user agent string.
         if not isinstance(user_agent, str):
-            LOGGER.warning(f"User agent string must be of type str. "
-                           f"No {self.__class__.__name__} instance created. "
-                           f"Returning 'None'."
-                           )
+            LOGGER.warning(
+                    f"User agent string must be of type str. "
+                    f"No {self.__class__.__name__} instance created. "
+                    f"Returning 'None'."
+                    )
         elif not user_agent or user_agent.isspace():
-            LOGGER.warning(f"User agent string must not be empty. "
-                           f"No {self.__class__.__name__} instance created. "
-                           f"Returning 'None'."
-                           )
+            LOGGER.warning(
+                    f"User agent string must not be empty. "
+                    f"No {self.__class__.__name__} instance created. "
+                    f"Returning 'None'."
+                    )
         # Input valid: Parse ua string and save to class attributes.
         else:
             self.parse(user_agent)
@@ -118,7 +132,8 @@ class UserAgent:
                 f"Browser: {self.browser} {self.browser_version}{browser_dot}"
                 f"{self.browser_version_minor}, "
                 f"Mobile: {self.mobile}, "
-                f"String: {self.string}")
+                f"String: {self.string}"
+        )
 
     def __repr__(self) -> str:
         """
@@ -241,7 +256,7 @@ class UserAgent:
                 ("microsoft", "Edge"),
                 ("edge", "Edge"),
                 ("ie", "IE"),
-                ("samsung", "Samsung Browser")
+                ("samsung", "Samsung Browser"),
                 ]
 
         browser = parsed["user_agent"]["family"]
@@ -255,10 +270,11 @@ class UserAgent:
                 browser = "Other"
 
         # Fix for Safari on Linux and Windows (not possible).
-        if (browser == "Safari"
-                and (parsed["os"]["family"] == "Linux"
-                     or parsed["os"]["family"] == "Windows"
-                     or parsed["os"]["family"] == "Android")):
+        if browser == "Safari" and (
+                parsed["os"]["family"] == "Linux"
+                or parsed["os"]["family"] == "Windows"
+                or parsed["os"]["family"] == "Android"
+        ):
             browser = "Other"
 
         return browser
@@ -283,7 +299,7 @@ class UserAgent:
                 ("debian", "Linux"),
                 ("fedora", "Linux"),
                 ("android", "Android"),
-                ("ios", "iOS")
+                ("ios", "iOS"),
                 ]
 
         os = parsed["os"]["family"]
@@ -299,11 +315,7 @@ class UserAgent:
         return os
 
     @staticmethod
-    def __parse_mobile(
-            string: str,
-            os: str,
-            browser: str
-            ) -> bool:
+    def __parse_mobile(string: str, os: str, browser: str) -> bool:
         """
         Parses if the OS/device is mobile from the user agent string.
 
@@ -322,8 +334,12 @@ class UserAgent:
         if os in _SUPPORTED_OS[-2:]:
             return True
 
-        return (browser == "Samsung Browser" or "android" in string_lower or
-                "iphone" in string_lower or "mobile" in string_lower)
+        return (
+                browser == "Samsung Browser"
+                or "android" in string_lower
+                or "iphone" in string_lower
+                or "mobile" in string_lower
+        )
 
     def parse(self, string: str) -> None:
         """
@@ -372,19 +388,22 @@ class UserAgent:
 
             # Check if OS/device is mobile.
             self.mobile = self.__parse_mobile(
-                    string=self.string,
-                    os=self.os,
-                    browser=self.browser
+                    string=self.string, os=self.os, browser=self.browser
                     )
 
         except Exception as e:
-            LOGGER.warning(f"Could not parse version numbering from "
-                           f"'user_agent_parser' data: "
-                           f"{str(e.__class__.__name__)}: {str(e)}"
-                           )
+            LOGGER.warning(
+                    f"Could not parse version numbering from "
+                    f"'user_agent_parser' data: "
+                    f"{str(e.__class__.__name__)}: {str(e)}"
+                    )
 
-            for attr in ["browser_version", "browser_version_minor",
-                         "os_version", "os_version_minor"]:
+            for attr in [
+                    "browser_version",
+                    "browser_version_minor",
+                    "os_version",
+                    "os_version_minor",
+                    ]:
                 setattr(self, attr, "")
 
 
@@ -406,7 +425,7 @@ class UserAgents:
         cached user agents are refreshed (default=86400).
     :type cache_duration: int
     :var cache_location: The folder to save the cached user agents in.
-    :type cache_location: str
+    :type cache_location: str.
     """
 
     _user_agents_cached = None
@@ -487,11 +506,13 @@ class UserAgents:
         reconstruction.
         """
 
-        return (f"{self.__class__.__name__}"
+        return (
+                f"{self.__class__.__name__}"
                 f"(max_retries={self._max_retries!r}, "
                 f"timeout={self._timeout!r}, "
                 f"cache_duration={self._cache_duration!r}, "
-                f"cache_location={self._cache_location!r})")
+                f"cache_location={self._cache_location!r})"
+        )
 
     @staticmethod
     def __convert_to_list(response_data: list[dict]) -> list[str]:
@@ -506,17 +527,18 @@ class UserAgents:
         """
 
         try:
-            sorted_data = sorted(response_data, key=lambda x: x['pct'],
-                                 reverse=True
-                                 )
-            ua_list = [entry['ua'] for entry in sorted_data]
+            sorted_data = sorted(
+                    response_data, key=lambda x: x["pct"], reverse=True
+                    )
+            ua_list = [entry["ua"] for entry in sorted_data]
 
         except Exception as e:
-            LOGGER.warning(f"Could not convert response data from "
-                           f"'useragents.me' to list. Maybe the API changed "
-                           f"its response format? "
-                           f"{str(e.__class__.__name__)}: {str(e)}"
-                           )
+            LOGGER.warning(
+                    f"Could not convert response data from "
+                    f"'useragents.me' to list. Maybe the API changed "
+                    f"its response format? "
+                    f"{str(e.__class__.__name__)}: {str(e)}"
+                    )
             return []
 
         return ua_list
@@ -542,17 +564,15 @@ class UserAgents:
             return response_data
 
         except Exception as e:
-            LOGGER.error(f"Could not find fallback file, that is shipped "
-                         f"with the package! Verify that the file exists "
-                         f"and if it does, report the issue please.\n"
-                         f"{str(e.__class__.__name__)}: {str(e)}"
-                         )
+            LOGGER.error(
+                    f"Could not find fallback file, that is shipped "
+                    f"with the package! Verify that the file exists "
+                    f"and if it does, report the issue please.\n"
+                    f"{str(e.__class__.__name__)}: {str(e)}"
+                    )
             return
 
-    def __response_data(
-            self,
-            url: str
-            ) -> requests.Response | None:
+    def __response_data(self, url: str) -> requests.Response | None:
         """
         Tries to reach the API for maximum of _max_retries times and
         returns the response data or None if API could not be reached.
@@ -566,10 +586,9 @@ class UserAgents:
         # Try to reach API for maximum 3 times (default).
         for i in range(1, self._max_retries + 1):
             try:
-                response = requests.get(url=url,
-                                        timeout=self._timeout,
-                                        allow_redirects=True
-                                        )
+                response = requests.get(
+                        url=url, timeout=self._timeout, allow_redirects=True
+                        )
 
             # If connection fails with exception, retry after delay.
             except Exception as e:
@@ -651,12 +670,14 @@ class UserAgents:
                     if "error" in key:
                         LOGGER.warning(
                                 "Rate limit reached for 'useragents.me' "
-                                "(15 requests/h)."
+                                "("
+                                "15 requests/h)."
                                 )
                         return
 
-                response_data["desktop"] = \
-                    self.__convert_to_list(response.json()["data"])
+                response_data["desktop"] = self.__convert_to_list(
+                        response.json()["data"]
+                        )
 
             # For mobile UA, we need to parse the HTML response and
             # extract the user agents from the textarea.
@@ -664,22 +685,25 @@ class UserAgents:
                 try:
                     soup = BeautifulSoup(response.text, "html.parser")
                     row = soup.find(
-                            "div", id="most-common-mobile-useragents-json-csv",
-                            class_="row"
+                            "div",
+                            id="most-common-mobile-useragents-json-csv",
+                            class_="row",
                             )
                     content = row.find("textarea", class_="form-control").text
 
                     # Remove newlines and whitespaces.
                     content = content.replace("\n", "").replace("  ", "")
 
-                    response_data["mobile"] = \
-                        self.__convert_to_list(json.loads(content))
+                    response_data["mobile"] = self.__convert_to_list(
+                            json.loads(content)
+                            )
 
                 except Exception as e:
-                    LOGGER.warning(f"Could not parse HTML response from "
-                                   f"'useragents.me': "
-                                   f"{str(e.__class__.__name__)}: {str(e)}"
-                                   )
+                    LOGGER.warning(
+                            f"Could not parse HTML response from "
+                            f"'useragents.me': "
+                            f"{str(e.__class__.__name__)}: {str(e)}"
+                            )
                     return
 
         if response_data["desktop"] and response_data["mobile"]:
@@ -704,9 +728,7 @@ class UserAgents:
 
         # Load cached user agents from json file.
         try:
-            fp = pathlib.Path(self._cache_location,
-                              "user_agents.json"
-                              )
+            fp = pathlib.Path(self._cache_location, "user_agents.json")
 
             with open(fp, "r") as fh:
                 response_data = json.load(fh)
@@ -735,16 +757,15 @@ class UserAgents:
         """
 
         if self._user_agents_cached:
-            if ((int(time.time()) - self._user_agents_cached["cached"]) <
-                    self._cache_duration):
+            if (
+                    int(time.time()) - self._user_agents_cached["cached"]
+            ) < self._cache_duration:
                 return True
 
         return False
 
     @staticmethod
-    def __check_num(num: int,
-                    mobile: bool
-                    ) -> tuple[int, str]:
+    def __check_num(num: int, mobile: bool) -> tuple[int, str]:
         """
         Checks if the requested number of user agents is valid.
 
@@ -759,15 +780,21 @@ class UserAgents:
             try:
                 num = int(num)
             except (TypeError, ValueError):
-                LOGGER.warning(f"Could not convert '{num}' to int. "
-                               "Returning empty list ..."
-                               )
+                LOGGER.warning(
+                        f"Could not convert '{num}' to int. "
+                        "Returning "
+                        "empty list ..."
+                        )
                 return 0, "mobile"
 
         if num and num < 1:
-            LOGGER.warning(f"You requested '{num}' user agents. "
-                           "Returning empty list ..."
-                           )
+            LOGGER.warning(
+                    f"You requested '{num}' user agents. "
+                    "Returning empty "
+                    ""
+                    ""
+                    "list ..."
+                    )
             return 0, "mobile"  # Device type does not matter.
 
         # Enforce maximum of 45 (23 for mobile) retrievable user agents.
@@ -810,10 +837,12 @@ class UserAgents:
         """
 
         # 1. Check for memory cached user agents (class attributes).
-        if (self._user_agents_cached
+        if (
+                self._user_agents_cached
                 and self._user_agents_cached["desktop"]
                 and self._user_agents_cached["mobile"]
-                and force_cached is not False):
+                and force_cached is not False
+        ):
 
             # Check if the cached uas are young enough.
             if self.__check_cached():
@@ -828,11 +857,8 @@ class UserAgents:
                 return self._user_agents_cached
 
             # If no local cached user agents are available.
-            LOGGER.warning("Falling back to historic user agent."
-                           )
-            return {"desktop": _FALLBACK_DESKTOP,
-                    "mobile": _FALLBACK_MOBILE
-                    }
+            LOGGER.warning("Falling back to historic user agent.")
+            return {"desktop": _FALLBACK_DESKTOP, "mobile": _FALLBACK_MOBILE}
 
         # 2. Check for local file cached user agents.
         if force_cached is not False:
@@ -844,17 +870,16 @@ class UserAgents:
 
         # 3. Call API to fetch user agents and save them to local cache.
         if force_cached is False:
-            LOGGER.info("Forcing the use of 'useragents.me' API instead "
-                        "of local cached user agents first ..."
-                        )
+            LOGGER.info(
+                    "Forcing the use of 'useragents.me' API instead "
+                    "of local cached user agents first ..."
+                    )
 
         self._user_agents_cached = self.__useragents_api()
 
         if self._user_agents_cached:
             try:
-                fp = pathlib.Path(self._cache_location,
-                                  "user_agents.json"
-                                  )
+                fp = pathlib.Path(self._cache_location, "user_agents.json")
 
                 # Save user agents to local file cache.
                 with open(fp, "w") as fh:
@@ -877,13 +902,12 @@ class UserAgents:
             return self._user_agents_cached
 
         # 5. Final fall back to historic hard-coded user agents.
-        LOGGER.critical("Falling back to historic hard-coded user agents."
-                        "These are not up to date and limited in number."
-                        "This should never happen. Please report this issue."
-                        )
-        return {"desktop": _FALLBACK_DESKTOP,
-                "mobile": _FALLBACK_MOBILE
-                }
+        LOGGER.critical(
+                "Falling back to historic hard-coded user agents."
+                "These are not up to date and limited in number."
+                "This should never happen. Please report this issue."
+                )
+        return {"desktop": _FALLBACK_DESKTOP, "mobile": _FALLBACK_MOBILE}
 
     def get_list(
             self,
@@ -892,7 +916,6 @@ class UserAgents:
             shuffle: bool = False,
             force_cached: bool = None,
             ) -> list[str]:
-
         """
         Fetches a list of usage weighted user agents as strings.
 

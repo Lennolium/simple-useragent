@@ -100,9 +100,9 @@ headers including client hints like sec-ch-ua, sec-fetch-site and more, check ou
 
 Just install the package from [PyPi](https://pypi.org/project/simple-useragent/) using pip:
 
-   ```bash
-    pip install simple-useragent
-   ```
+```bash
+pip install simple-useragent
+```
 
 &nbsp;
 
@@ -114,67 +114,67 @@ Just install the package from [PyPi](https://pypi.org/project/simple-useragent/)
 
 Just import the package and use the convenience functions. For more advanced usage, you can initialize the class to set custom settings.
 
-   ```python
-    import simple_useragent as sua
+```python
+import simple_useragent as sua
 
-    sua.get(num=2, mobile=True)  # List of the 2 most common mobile user agents (attributes explained below).
-    # [UserAgent('Mozilla/5.0 (Android ...'), UserAgent('Mozilla/5.0 (iPhone; ...')]
-    
-    sua.get_list(shuffle=True, force_cached=True)  # Random list of available desktop user agents strings.
-    # ['Mozilla/5.0 ...', 'Mozilla/5.0 (iPhone ...', 'Mozilla/5.0 (iPhone ...', ...]
-    
-    sua.get_dict()  # Dictionary with all desktop and mobile user agents.
-    # {'desktop': ['Mozilla/5.0 ...', ...] 'mobile': ['Mozilla/5.0 (iPhone ...', ...]}
-   ```
+sua.get(num=2, mobile=True)  # List of the 2 most common mobile user agents (attributes explained below).
+# [UserAgent('Mozilla/5.0 (Android ...'), UserAgent('Mozilla/5.0 (iPhone; ...')]
+
+sua.get_list(shuffle=True, force_cached=True)  # Random list of available desktop user agents strings.
+# ['Mozilla/5.0 ...', 'Mozilla/5.0 (iPhone ...', 'Mozilla/5.0 (iPhone ...', ...]
+
+sua.get_dict()  # Dictionary with all desktop and mobile user agents.
+# {'desktop': ['Mozilla/5.0 ...', ...] 'mobile': ['Mozilla/5.0 (iPhone ...', ...]}
+```
 &nbsp;
 
 #### Advanced Usage
 
 Import the package and initialize the UserAgents class to set custom settings (optional, see [Settings and Parameters](#settings-and-parameters) for details).
-   ```python
-    import simple_useragent as sua
+```python
+import simple_useragent as sua
 
-    simple_ua = sua.UserAgents(max_retries=3, timeout=5, cache_duration=86400, cache_location='example/path/to/folder')
-   ```
+simple_ua = sua.UserAgents(max_retries=3, timeout=5, cache_duration=86400, cache_location='example/path/to/folder')
+```
 &nbsp;
 
 Fetching User Agents.
-   ```python
-    # Fetch a specified number of random mobile user agent instances (with settings from the class above).
-    simple_ua.get(num=2, shuffle=True, mobile=True)
-    # [UserAgent('Mozilla/5.0 (iPhone ...'), UserAgent('Mozilla/5.0 (iPhone; ...')]
-   ```  
+```python
+# Fetch a specified number of random mobile user agent instances (with settings from the class above).
+simple_ua.get(num=2, shuffle=True, mobile=True)
+# [UserAgent('Mozilla/5.0 (iPhone ...'), UserAgent('Mozilla/5.0 (iPhone; ...')]
+```  
 &nbsp;
 
 You can also use the convenience functions to get user agents without initializing the class.
-   ```python
-    sua.get(num=2, mobile=True)  # List of the 2 most common mobile user agent (attributes explained below).
-    # [UserAgent('Mozilla/5.0 (Android ...'), UserAgent('Mozilla/5.0 (iPhone; ...')]
-    
-    sua.get_list(force_cached=True)  # List of all available desktop user agents as strings.
-    # ['Mozilla/5.0 ...', 'Mozilla/5.0 (iPhone ...', 'Mozilla/5.0 (iPhone ...', ...]
-    
-    sua.get_dict()  # Dictionary with all desktop and mobile user agents.
-    # {'desktop': ['Mozilla/5.0 ...', ...] 'mobile': ['Mozilla/5.0 (iPhone ...', ...]}
-   ```
+```python
+sua.get(num=2, mobile=True)  # List of the 2 most common mobile user agent (attributes explained below).
+# [UserAgent('Mozilla/5.0 (Android ...'), UserAgent('Mozilla/5.0 (iPhone; ...')]
+
+sua.get_list(force_cached=True)  # List of all available desktop user agents as strings.
+# ['Mozilla/5.0 ...', 'Mozilla/5.0 (iPhone ...', 'Mozilla/5.0 (iPhone ...', ...]
+
+sua.get_dict()  # Dictionary with all desktop and mobile user agents.
+# {'desktop': ['Mozilla/5.0 ...', ...] 'mobile': ['Mozilla/5.0 (iPhone ...', ...]}
+```
 &nbsp;
 
 The instance offers attributes for the user agent properties.
-   ```python
-    # Parse a custom string directly to the UserAgent class and access its attributes.
-    obj = sua.parse('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36')
-    obj.string  # 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit ...'
-    obj.browser  # 'Chrome', 'Firefox', 'Safari', 'Edge', 'IE', 'Opera', 'Whale', 'QQ Browser', 'Samsung Browser', 'Other'
-    obj.browser_version  # '110', '109', '537', ...
-    obj.browser_version_minor  # '0', '1', '36', ...
+```python
+# Parse a custom string directly to the UserAgent class and access its attributes.
+obj = sua.parse('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36')
+obj.string  # 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit ...'
+obj.browser  # 'Chrome', 'Firefox', 'Safari', 'Edge', 'IE', 'Opera', 'Whale', 'QQ Browser', 'Samsung Browser', 'Other'
+obj.browser_version  # '110', '109', '537', ...
+obj.browser_version_minor  # '0', '1', '36', ...
 
-    # You can also access the attributes with square brackets.
-    obj = sua.get(num=1, shuffle=True)[0]
-    obj['os']  # 'Windows', 'macOS', 'Linux', 'Android', 'iOS', 'Other'
-    obj['os_version']  # '10', '7', '11', '14', ...
-    obj['os_version_minor']  # '0', '1', '2', ...
-    obj['mobile']  # True / False
-   ```
+# You can also access the attributes with square brackets.
+obj = sua.get(num=1, shuffle=True)[0]
+obj['os']  # 'Windows', 'macOS', 'Linux', 'Android', 'iOS', 'Other'
+obj['os_version']  # '10', '7', '11', '14', ...
+obj['os_version_minor']  # '0', '1', '2', ...
+obj['mobile']  # True / False
+```
 &nbsp;
 
 #### Settings and Parameters

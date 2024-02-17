@@ -30,7 +30,6 @@ import os.path
 import pathlib
 import time
 
-import simple_useragent
 from requests.models import Response
 import unittest
 from unittest.mock import Mock, patch, mock_open
