@@ -53,3 +53,5 @@ __github__ = "https://github.com/Lennolium/simple-useragent"
 
 # Imports.
 from .core import UserAgents, UserAgent, get_dict, get_list, get, parse
+
+__all__ = ("UserAgents", "UserAgent", "get_dict", "get_list", "get", "parse")

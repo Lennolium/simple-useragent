@@ -94,9 +94,8 @@ if test ! "$(which "${min_py_version}")" && test $os = "Linux"; then
     _info "P${min_py_version:1} is not installed! Installing with apt-get ..."
     sudo apt-get update 2>&1 | tee -a trace.log
     sudo apt-get install "${min_py_version}" 2>&1 | tee -a trace.log && _success || _failed
-    # From python version 3.3 and above, venv is included in the standard library.
-    # sudo apt-get install "${min_py_version}"-venv 2>&1 | tee -a trace.log && _success || _failed
-elif test ! "$(which "${min_py_version}")" && test $os = "macxOS";
+    sudo apt-get install "${min_py_version}"-venv 2>&1 | tee -a trace.log && _success || _failed
+elif test ! "$(which "${min_py_version}")" && test $os = "macOS";
 then
     _warn
     _info "P${min_py_version:1} is not installed! Installing with Homebrew ..."
@@ -136,9 +135,9 @@ ${min_py_version} -m venv .buildvenv >> trace.log 2>&1 && _success || _failed
 # Activate virtual environment, update and install requirements.
 _info "Installing and updating requirements ..."
 source ./.buildvenv/bin/activate >> trace.log 2>&1
-pip"$min_py_version_num" install --upgrade pip >> trace.log 2>&1
+${min_py_version} -m pip install --upgrade pip >> trace.log 2>&1
 ${min_py_version} -m pip install pip-tools >> trace.log 2>&1
-pip"$min_py_version_num" install -r requirements-dev.txt >> trace.log 2>&1 && _success || _failed
+${min_py_version} -m pip install -r requirements-dev.txt >> trace.log 2>&1 && _success || _failed
 
 
 # Running tests, but first check if tests folder exists.
@@ -211,12 +210,21 @@ git tag "v$version" >> trace.log 2>&1 && _success || _failed
 _info "Committing with message: 'v$version' ..."
 git commit -m "v$version" >> trace.log 2>&1 && _success || _failed
 _info "Pushing to GitHub (dev) ..."
-git push origin dev --tags --force >> trace.log 2>&1 && _success || _failed
+if git push origin dev --tags >> trace.log 2>&1;
+then
+  _success;
+else
+    _warn
+    _info "Push failed. Forcing push now to dev branch ..."
+    git push origin dev --tags --force >> trace.log 2>&1 && _success || _failed;
+fi
+
 
 # Creating pull request to main branch.
 _info "Creating a pull request to merge dev into main ..."
 pr_title="Merge dev into main $(date +'%Y%m%d%H%M%S')"
 gh pr create --base main --head dev --title "$pr_title" --body "Automated pull request to merge dev into main." >> trace.log 2>&1 && _success || _failed
+
 
 # Approve the pull request (permissions required).
 _info "Approving the pull request ..."
