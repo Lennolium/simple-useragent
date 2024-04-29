@@ -1,9 +1,6 @@
 ## 🚀 What's New 
-- Fixed severe exceptions occurring at runtime and blocking functionality.
+- Useragents API is not reachable since months. Fixed by parsing (Thanks @ndragon798).
 - Improved exception handling and error messages.
-- More support for different user agents and platforms.
-- Build and deployment pipeline now includes automated testing and deployment (build.sh).
-- Added more documentation and better examples.
 - General refactoring.
 &nbsp;
 

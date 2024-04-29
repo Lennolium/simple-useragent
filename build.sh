@@ -189,7 +189,7 @@ cd .. || exit
 
 
 # Upload build to PyPI. Credentials are in '~.pypirc'.
-_info "Uploading to the built package PyPI ...\n"
+_info "Uploading the built package to PyPI ...\n"
 # twine upload --repository pypi ./dist/*.tar.gz ./dist/*.whl && _success || _failed
 
 

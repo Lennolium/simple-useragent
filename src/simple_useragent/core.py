@@ -15,8 +15,8 @@ from __future__ import annotations
 __author__ = "Lennart Haack"
 __email__ = "simple-useragent@lennolium.dev"
 __license__ = "GNU GPLv3"
-__version__ = "0.1.4"
-__date__ = "2024-02-14"
+__version__ = "0.1.5"
+__date__ = "2024-04-29"
 __status__ = "Development"
 __github__ = "https://github.com/Lennolium/simple-useragent"
 
@@ -335,8 +335,7 @@ class UserAgent:
             return True
 
         return (
-                browser == "Samsung Browser"
-                or "android" in string_lower
+                "android" in string_lower
                 or "iphone" in string_lower
                 or "mobile" in string_lower
         )
@@ -663,6 +662,8 @@ class UserAgents:
                 return
 
             # For desktop UA, we can use the json response of the API.
+            # FIX: API is offline for several months now. Changed to
+            # parsing the HTML response (Thanks to Nathan Easton).
             if device == "desktop":
                 try:
                     soup = BeautifulSoup(response.text, "html.parser")
@@ -744,7 +745,7 @@ class UserAgents:
                 return response_data
 
         except FileNotFoundError:
-            LOGGER.info(
+            LOGGER.debug(
                     "No cached 'user_agents.json' found. Maybe your first run?"
                     )
             return
@@ -858,7 +859,7 @@ class UserAgents:
 
         # 1.5. Forced use of local file cached user agents.
         if force_cached:
-            LOGGER.info("Forcing the use of local cached user agents ...")
+            LOGGER.debug("Forcing the use of local cached user agents ...")
             self._user_agents_cached = self.__useragents_cached()
 
             if self._user_agents_cached:
@@ -878,7 +879,7 @@ class UserAgents:
 
         # 3. Call API to fetch user agents and save them to local cache.
         if force_cached is False:
-            LOGGER.info(
+            LOGGER.debug(
                     "Forcing the use of 'useragents.me' API instead "
                     "of local cached user agents first ..."
                     )
@@ -999,3 +1000,9 @@ get_list = UserAgents().get_list
 get_dict = UserAgents().get_dict
 get = UserAgents().get
 parse = UserAgent
+
+if __name__ == "__main__":
+    # Test the package.
+    ua = get(num=5)
+    for i, u in enumerate(ua):
+        print(f"{i + 1}. {u}")
