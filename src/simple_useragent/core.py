@@ -649,7 +649,7 @@ class UserAgents:
 
         # For mobile user agents, we can not use the api endpoint.
         endpoints = {
-                "desktop": "https://www.useragents.me/api",
+                "desktop": "https://www.useragents.me/",
                 "mobile": "https://www.useragents.me/",
                 }
         response_data = {"desktop": None, "mobile": None, "cached": None}
@@ -664,21 +664,29 @@ class UserAgents:
 
             # For desktop UA, we can use the json response of the API.
             if device == "desktop":
+                try:
+                    soup = BeautifulSoup(response.text, "html.parser")
+                    row = soup.find(
+                            "div",
+                            id="most-common-desktop-useragents-json-csv",
+                            class_="row",
+                            )
+                    content = row.find("textarea", class_="form-control").text
 
-                # Rate limit reached.
-                for key in response.json():
-                    if "error" in key:
-                        LOGGER.warning(
-                                "Rate limit reached for 'useragents.me' "
-                                "("
-                                "15 requests/h)."
-                                )
-                        return
+                    # Remove newlines and whitespaces.
+                    content = content.replace("\n", "").replace("  ", "")
+                    print(content)
+                    response_data["desktop"] = self.__convert_to_list(
+                            json.loads(content)
+                            )
 
-                response_data["desktop"] = self.__convert_to_list(
-                        response.json()["data"]
-                        )
-
+                except Exception as e:
+                    LOGGER.warning(
+                            f"Could not parse HTML response from "
+                            f"'useragents.me': "
+                            f"{str(e.__class__.__name__)}: {str(e)}"
+                            )
+                    return
             # For mobile UA, we need to parse the HTML response and
             # extract the user agents from the textarea.
             else:
