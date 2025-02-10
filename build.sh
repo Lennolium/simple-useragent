@@ -92,6 +92,8 @@ current_branch=$(git rev-parse --abbrev-ref HEAD)
 _info "Confirming we are on the dev branch ..."
 if [ "$current_branch" != "dev" ]; then
     _failed
+else
+    _success
 fi
 
 
