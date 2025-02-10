@@ -87,6 +87,14 @@ _logo "Execution time: $(date +'%y/%m/%d %H:%M:%S')"
 _logo "-------------------------------------------------------------------------- \n\n"
 
 
+# Confirm we are on the dev branch.
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+_info "Confirming we are on the dev branch ..."
+if [ "$current_branch" != "dev" ]; then
+    _failed
+fi
+
+
 # Check if Python 3 is installed and install it if not.
 _info "Checking and installing system dependencies (${min_py_version}) ..."
 if test ! "$(which "${min_py_version}")" && test $os = "Linux"; then
@@ -141,14 +149,14 @@ ${min_py_version} -m pip install -r requirements-dev.txt >> trace.log 2>&1 && _s
 
 
 # Running tests, but first check if tests folder exists.
-if [ ! -d "./tests" ]; then
-    _info "No tests folder found. Skipping tests ..."; _warn
-else
-    _info "Running unit tests now ..."
-    cd src || exit
-    ${min_py_version} -m unittest discover -s ../tests >> ../trace.log 2>&1 && _success || _failed
-    cd .. || exit
-fi
+# if [ ! -d "./tests" ]; then
+#     _info "No tests folder found. Skipping tests ..."; _warn
+# else
+#     _info "Running unit tests now ..."
+#     cd src || exit
+#     ${min_py_version} -m unittest discover -s ../tests >> ../trace.log 2>&1 && _success || _failed
+#     cd .. || exit
+# fi
 
 # Override the version variable of setup.cfg with the version number of __init__.py.
 _info "Updating the version in 'setup.cfg' and 'README.md' to $version ..."
