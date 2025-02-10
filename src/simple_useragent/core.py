@@ -15,8 +15,8 @@ from __future__ import annotations
 __author__ = "Lennart Haack"
 __email__ = "simple-useragent@lennolium.dev"
 __license__ = "GNU GPLv3"
-__version__ = "0.1.5"
-__date__ = "2024-04-29"
+__version__ = "0.1.6"
+__date__ = "2025-02-10"
 __status__ = "Development"
 __github__ = "https://github.com/Lennolium/simple-useragent"
 
